@@ -1,0 +1,105 @@
+# 1 DARTH介绍
+
+DARTH（Decision Analysis in R for Technologies in Health）框架是一种用于在R中进行决策分析建模的框架。它提供了一系列基于R语言的工具和函数，用于评估健康技术的成本效益、风险和不确定性。DARTH框架的优势在于其灵活性和可扩展性，它可以适应不同的决策问题和建模需求，并可以与其他 R 包和工具集成使用。作为 R 包 (darthpack) 实现，可通过 GitHub ( <https://github.com/DARTH-git/darthpack> )免费下载。 药物经济学中的决策建模在制定健康政策和指南方面发挥着重要作用。但是这些模型通常缺乏透明度，这使得对其结果的评估和复制变得困难。，旨在提高决策建模的透明度和可复制性。该框架包括以下五个步骤：1）定义决策问题和目标；2）建立模型结构；3）指定参数和变量；4）执行模型分析；5）进行敏感性分析和验证。我们使用了一个真实的决策建模案例来演示该框架的应用，并讨论了其优点和局限性。我们认为，这个编码框架有助于提高决策建模的透明度和可复制性，从而促进健康政策和指南的制定。
+
+# 2 病毒性脑炎
+
+病毒性脑炎可由疱疹引起病毒 (HVE) 或其他病毒 (OVE)。携带 HVE 的概率为 52% 。携带 HVE 的患者有 71% 的可能性产生并发症；携带 OVE 的概率为 48%，产生并发症的概率为 1%。共有以下三种治疗措施：**（1）不治疗**；产生并发症的护理费用为 9000 元，剩余 QALY 为 19，无并发症的护理费用为 1200 元，剩余 QALY 为 20。**（2）治疗；**阿糖腺苷是治疗病毒性脑炎的一种有效药物，治疗成本为 9500 元，将 HVE 并发症的概率从 71% 降低至 36% 。接受阿糖腺苷治疗的 OVE 患者中，副作用导致并发症的发生率从 1% 增加到 20%。**（3）脑活检；**脑活检明确诊断，但这个过程本身有死亡的风险 0.5%，且永久性导致的 QALY 损失 0.01。 在 TreeAge Pro中构建决策树模型，用于比较三个方案的经济性。
+
+# 3 加载 DARTH 框架
+
+```{r, warning = FALSE, message = FALSE}
+if (!require('pacman')) install.packages('pacman'); library(pacman) # use this package to conveniently install other packages
+# load (install if required) packages from CRAN
+p_load("devtools", "scales", "ellipse", "lazyeval", "igraph",  "ggraph", "reshape2", "knitr", "stringr", "jsonlite", "rstudioapi", "tidyverse", "dampack")                                               
+# load (install if required) packages from GitHub
+p_load_gh("DARTH-git/darthtools", "DARTH-git/OpenTree")
+```
+
+# 4 定义需要输入的参数
+
+```{r}
+v_names_str    <- c("Do not treat", "Treat", "Biopsy")  # 三种治疗策略
+n_str          <- length(v_names_str)                   
+wtp            <- 100000                                # 意愿支付值
+
+# 转移概率
+p_HVE          <- 0.52   # 孢疹病毒感染概率
+p_HVE_comp     <- 0.71   # 疱疹病毒并发症概率
+p_OVE_comp     <- 0.01   # 其他病毒并发症概率
+p_HVE_comp_tx  <- 0.36   # 阿糖腺苷治疗后疱疹病毒并发症概率
+p_OVE_comp_tx  <- 0.20   # 阿糖腺苷治疗后其他病毒并发症概率
+p_biopsy_death <- 0.005  # 阿糖腺苷致死率
+
+# 成本
+c_VE           <- 1200   # 无并发症的病毒性脑炎护理费用
+c_VE_comp      <- 9000   # 并发症的病毒性脑炎护理费用
+c_tx           <- 9500   # 阿糖腺苷治疗成本
+c_biopsy       <- 25000  # 脑活检的成本
+c_death_biopsy <- 0      # 脑活检导致死亡的成本
+
+# QALYs
+q_VE           <- 20     # 无病毒并发症剩余的QALY
+q_VE_comp      <- 19     # 病毒并发症剩余的QALY
+q_loss_biopsy  <- 0.01   # 脑活检的QALY损失
+q_death_biopsy <- 0      #脑活检导致死亡的QALY
+```
+
+# 5 建立决策树
+
+## 5.1 使用交互式 Web 应用程序shiny建立决策树
+
+Shiny 应用程序通过 Web 访问 R 模型，可以在Web上修改输入参数也可以下载并在本地运行。 The function `create_tree()` creates a blank tree and the function `open_tree()` opens an existing decision tree.
+
+函数'create_tree()'创建一个空白树，函数'open_tree()'打开一个现有的决策树。'create_tree()'只能用来创建空白的新树，不能用它来访问或修改现有的树，否则树将被擦除。使用' open_tree()'来打开和修改现有的树。在' open_tree() '中对树所做的任何更改都会自动保存为'Json'文件到工作目录。
+
+```{r}
+#create_tree(file_name = "HVE_decision_tree", dir_name = getwd())
+open_tree(file_name = "HVE_decision_tree", dir_name = getwd())
+```
+
+## 5.2 提取决策树的转移概率和模型输出结果
+
+```{r, warning = F}
+# extract the probability weights and outcomes  
+df_tree <- evaluate_model("HVE_decision_tree", n_payoffs = 2)
+```
+
+## 5.3 计算总成本和QALYs
+
+```{r}
+v_total_qaly <- v_total_cost <- vector(mode = "numeric", length = n_str)
+
+# 计算每组中的总成本和QALYs
+ for (i in 1:n_str) {
+  v_total_qaly[i] <- df_tree[[i]]$prob %*% df_tree[[i]]$payoff1
+  v_total_cost[i] <- df_tree[[i]]$prob %*% df_tree[[i]]$payoff2
+ }
+
+# 计算净效益
+v_nmb <- v_total_qaly * wtp - v_total_cost 
+          
+df_output <- data.frame(Strategy =  v_names_str,
+                        Cost     =  v_total_cost,
+                        Effect   =  v_total_qaly,
+                        NMB      =  v_nmb)
+
+# 模型输出
+df_output
+```
+
+# 6 成本效果分析
+
+```{r}
+# 建立不同策略的矩阵
+decision_tree_HVE_cea  <- calculate_icers(cost       = df_output$Cost,
+                                          effect     = df_output$Effect,
+                                          strategies = df_output$Strategy)
+decision_tree_HVE_cea
+```
+
+## 6.1 绘制成本效果分析图
+
+```{r}
+plot(decision_tree_HVE_cea, effect_units = "QALYs", label="all")
+```
