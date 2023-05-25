@@ -1,3 +1,27 @@
+---
+title: 'Survival Analysis in R'
+subtitle:
+author: "Wang Ye"
+output:
+  pdf_document: default
+  html_document: default
+keep_tex: yes
+self_contained: no
+---
+Authors: 
+
+- Wang Ye  <1589936809@qq.com>
+
+- Wang Hao
+
+In collaboration of: 		
+
+1. Nanjing Drum Tower Hospital, China Pharmaceutical University, Nanjing, China
+
+2. Department of Pharmacy, Drum Tower Hospital Affiliated to Medical School of 
+Nanjing University, Nanjing, China
+
+This Code adaptation Developed by the Decision Analysis in R for Technologies in Health (DARTH) workgroup.
 
 
 ## Preparation
