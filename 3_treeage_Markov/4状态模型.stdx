@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.treeage.treeagepro.model.stdx="http://www.treeage.com/modeldefs/stdx" xmlns:diagram="http://www.treeage.com/modeldefs/viewmodel">
+  <diagram:ContainerView container="/1">
+    <nodes constraints="196,149,102,50" node="/1/@nodes.0"/>
+    <nodes constraints="348,150,117,50" node="/1/@nodes.1"/>
+    <nodes constraints="500,148,118,50" node="/1/@nodes.2"/>
+    <nodes constraints="349,267,120,50" node="/1/@nodes.3"/>
+    <connections source="/0/@nodes.0" target="/0/@nodes.1" connection="/1/@connections.0"/>
+    <connections source="/0/@nodes.1" target="/0/@nodes.2" connection="/1/@connections.1"/>
+    <connections source="/0/@nodes.2" target="/0/@nodes.3" connection="/1/@connections.2"/>
+    <connections source="/0/@nodes.1" target="/0/@nodes.3" connection="/1/@connections.3"/>
+    <connections source="/0/@nodes.0" target="/0/@nodes.3" connection="/1/@connections.4"/>
+    <connections source="/0/@nodes.0" target="/0/@nodes.0" connection="/1/@connections.5">
+      <bendpoints>299,132</bendpoints>
+      <bendpoints>332,139</bendpoints>
+      <bendpoints>325,160</bendpoints>
+    </connections>
+    <connections source="/0/@nodes.1" target="/0/@nodes.1" connection="/1/@connections.6">
+      <bendpoints>447,127</bendpoints>
+      <bendpoints>485,130</bendpoints>
+      <bendpoints>484,150</bendpoints>
+    </connections>
+    <connections source="/0/@nodes.2" target="/0/@nodes.2" connection="/1/@connections.7">
+      <bendpoints>645,160</bendpoints>
+      <bendpoints>671,176</bendpoints>
+      <bendpoints>642,191</bendpoints>
+    </connections>
+    <connections source="/0/@nodes.3" target="/0/@nodes.3" connection="/1/@connections.8">
+      <bendpoints>495,278</bendpoints>
+      <bendpoints>522,294</bendpoints>
+      <bendpoints>494,310</bendpoints>
+    </connections>
+  </diagram:ContainerView>
+  <com.treeage.treeagepro.model.stdx:StdxContainer statesCounter="5">
+    <nodes xsi:type="com.treeage.treeagepro.model.stdx:StateNode" name="Healthy(H)" id="1"/>
+    <nodes xsi:type="com.treeage.treeagepro.model.stdx:StateNode" name="Sick(S1)" id="2"/>
+    <nodes xsi:type="com.treeage.treeagepro.model.stdx:StateNode" name="Sick(S2)" id="3"/>
+    <nodes xsi:type="com.treeage.treeagepro.model.stdx:StateNode" name="Dead(D)" id="4"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.0" target="/1/@nodes.1"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.1" target="/1/@nodes.2"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.2" target="/1/@nodes.3"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.1" target="/1/@nodes.3"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.0" target="/1/@nodes.3"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.0" target="/1/@nodes.0"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.1" target="/1/@nodes.1"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.2" target="/1/@nodes.2"/>
+    <connections xsi:type="com.treeage.treeagepro.model.stdx:TransitionArc" source="/1/@nodes.3" target="/1/@nodes.3"/>
+  </com.treeage.treeagepro.model.stdx:StdxContainer>
+  <diagram:Properties map="{prefShowStateId=&quot;true&quot;, prefShowStateArcName=&quot;true&quot;}"/>
+</xmi:XMI>
